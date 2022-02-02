@@ -41,7 +41,7 @@ public class CustomWebElement implements Element {
         } catch (ElementClickInterceptedException ece) {
             ReportTrail.error("Click intercepted exception for " + customElement);
         }catch  (Exception e){
-            ReportTrail.error("Unable to click on " + customElement);
+            ReportTrail.error("Unable to double click on " + customElement);
         }
     }
 
@@ -133,7 +133,7 @@ public class CustomWebElement implements Element {
         } catch (ElementClickInterceptedException ece){
             ReportTrail.error("Click intercepted exception for " + customElement);
         }catch  (Exception e){
-            ReportTrail.error("Unable to find  " + customElement);
+            ReportTrail.error("Unable to check if element is enabled for the locator:   " + customElement);
         }
         return check;
     }
