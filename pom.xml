@@ -6,7 +6,7 @@
 
     <groupId>com.tmavens</groupId>
     <artifactId>UiFramework</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.10</version>
 
     <build>
         <plugins>

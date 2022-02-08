@@ -1,6 +1,6 @@
 package framepack.uipieces.elements;
 
-import ReportUtility.ReportTrail;
+import reports.ReportTrail;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;

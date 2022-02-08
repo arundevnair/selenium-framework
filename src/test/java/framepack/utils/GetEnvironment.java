@@ -1,6 +1,6 @@
 package framepack.utils;
 
-import ReportUtility.ReportTrail;
+import reports.ReportTrail;
 
 public class GetEnvironment {
 

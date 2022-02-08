@@ -1,4 +1,4 @@
-package ReportUtility;
+package reports;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +9,16 @@ public class ReportTrail {
 
 
     public static void info(String message){ logger.info("Info: " + message); }
+
+    public static void error(String message, Object p0, Object p1){
+        logger.error("Error: " + message);
+        logger.error(message,p0,p1);
+    }
+
+    public static void errorScreen(String message, Object p0){
+        logger.error("Error: " + message);
+        logger.error(message,p0);
+    }
 
     public static void fail(String message){
         logger.fatal("Fail: " + message);

@@ -1,6 +1,6 @@
 package framepack.apiFunctions;
 
-import ReportUtility.ReportTrail;
+import reports.ReportTrail;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

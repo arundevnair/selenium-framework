@@ -1,6 +1,6 @@
 package framepack.uipieces.drivers;
 
-import ReportUtility.ReportTrail;
+import reports.ReportTrail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -55,6 +55,7 @@ public class StartDriver {
 
         }
         driver.manage().window().maximize();
+        OmniDriver.setDriver(driver);
 
     }
 

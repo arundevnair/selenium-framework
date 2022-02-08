@@ -1,7 +1,7 @@
 package framepack.apiFunctions;
 
 
-import ReportUtility.ReportTrail;
+import reports.ReportTrail;
 import io.restassured.RestAssured;
 import io.restassured.config.HttpClientConfig;
 import io.restassured.config.RestAssuredConfig;

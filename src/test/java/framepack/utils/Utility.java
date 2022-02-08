@@ -1,6 +1,7 @@
 package framepack.utils;
 
-import ReportUtility.ReportTrail;
+import org.apache.commons.codec.binary.Base64;
+import reports.ReportTrail;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -8,8 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -270,7 +270,7 @@ public class Utility {
             // now copy the screenshot to desired location using copyFile //method
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss");
             String stringDate = dateFormat.format(new Date());
-            String saveLocation = "pics/screenshot"
+            String saveLocation = "executionResults/pics/screenshot"
                     + stringDate + ".png";
             fileName =
                     saveLocation.replace(
@@ -282,8 +282,49 @@ public class Utility {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
         return fileName;
+
     }
+
+    public static String captureScreenshotB64(WebDriver driver) {
+
+        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        String fileName = "";
+        try {
+            // now copy the screenshot to desired location using copyFile //method
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss");
+            String stringDate = dateFormat.format(new Date());
+            String saveLocation = "executionResults/pics/screenshot"
+                    + stringDate + ".png";
+            fileName =
+                    saveLocation.replace(
+                            System.getProperty("user.dir") + File.separator + "ReportTrails" + File.separator,
+                            "");
+            FileUtils.copyFile(src, new File(saveLocation));
+            Reporter.log("<a href=\"" + "file:///" + System.getProperty("user.dir")
+                    + "/screenshots/" + fileName + "\">Screenshot</a>");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        File file = new File(fileName);
+        FileInputStream fileInputStreamReader = null;
+        String b64Encodedfile = null;
+        try {
+            fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            b64Encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
+            ReportTrail.error("RP_MESSAGE#BASE64#{}#{}",b64Encodedfile,
+                    "Failure ScreenPrint");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileName;
+
+    }
+
 
     public static long getTimeDifference(){
         long diff = 0;
