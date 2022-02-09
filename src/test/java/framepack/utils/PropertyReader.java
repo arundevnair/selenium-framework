@@ -1,47 +1,50 @@
 package framepack.utils;
 
 
+import reports.ReportTrail;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
 public class PropertyReader {
 
     static Properties prop = new Properties();
     static InputStream input = null;
-    static int counter=0;
 
-    public static String getProperty(String s)  {
-        String str ="";
+    public static String getProperty(String propertyName) {
+        String propertyValue = "";
         try {
-            if(!prop.isEmpty()&&counter<=1){
-                input = new FileInputStream("config_"+GetEnvironment.getEnv()+".properties");
-            }else if(counter==0){
-                input = new FileInputStream("config_default.properties");
-            }
-            counter++;
-            if(counter<=2){
-                prop.load(input);
-            }
-            str = prop.get(s).toString();
-
+            String envFound = GetEnvironment.getEnv();
+            ReportTrail.info("Reading the property " + propertyName + " for env " + envFound);
+            input = new FileInputStream("config_" + envFound + ".properties");
+            prop.load(input);
+            propertyValue = prop.get(propertyName).toString();
         } catch (IOException ex) {
             try {
+                ReportTrail.info("Encountered error while trying to read the property. Hence reading it from default property file");
                 input = new FileInputStream("config_default.properties");
                 prop.load(input);
-                str = prop.get(s).toString();}
-            catch(Exception e2)
-            {e2.printStackTrace();}
-        } finally {
+                propertyValue = prop.get(propertyName).toString();
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
             if (input != null) {
                 try {
-                    input.close();}
-                catch (IOException e) {
-                    e.printStackTrace();}
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        return str;
+        ReportTrail.info("Property value found as " + propertyValue );
+        return propertyValue;
     }
 
 

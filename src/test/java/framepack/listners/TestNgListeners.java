@@ -23,7 +23,9 @@ public class TestNgListeners implements ITestListener {
 
     public void onTestFailure(ITestResult result) {
         ReportTrail.info("Test Failed: " + result.getMethod().getMethodName());
-        String fileName = Utility.captureScreenshot(OmniDriver.getDriver());
+//        String fileName = Utility.captureScreenshot(OmniDriver.getDriver());
+        String fileName = Utility.captureScreenshotB64(OmniDriver.getDriver());
+        ReportTrail.errorScreen("Adding screenshot of error screen", fileName);
     }
 
     public void onTestSkipped(ITestResult result) {
