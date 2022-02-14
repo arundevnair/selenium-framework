@@ -14,6 +14,7 @@ public class CustomWebElement implements Element {
         customElement = webElement;
     }
 
+    @Deprecated     // to discourage the basic click method
     public void click(){
         try{
             String eleName = elementName();
@@ -55,6 +56,8 @@ public class CustomWebElement implements Element {
             ReportTrail.error("Element " + elementType + " not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
             ReportTrail.error("Click intercepted exception for " + elementType + " "+ customElement);
+        }catch (ElementNotInteractableException ece){
+            ReportTrail.error("ElementNotInteractable Exception for " + elementType + " "+ customElement);
         }catch  (Exception e){
             e.printStackTrace();
             ReportTrail.error("Unable to click on " + elementType + " "+ customElement);
@@ -65,11 +68,9 @@ public class CustomWebElement implements Element {
         click("radio button");
     }
 
-
     public void clickButton(){
         click("button");
     }
-
 
     public void clickCheckBox(){
         click("check box item");
@@ -164,15 +165,31 @@ public class CustomWebElement implements Element {
         return check;
     }
 
-
+    public void selectByIndex(int index){
+        try{
+            String eleName = elementNameDropdown();
+            ReportTrail.info("Selecting item with index as " + index + " from " + eleName + " dropdown");
+            Select selector = new Select(customElement);
+            selector.selectByIndex(index);
+            ReportTrail.info("Selected item with index as " + index + " from " + eleName + " dropdown");
+        }catch (NoSuchElementException ne){
+            ReportTrail.error("Element not found with the locator " + customElement);
+        } catch (ElementClickInterceptedException ece){
+            ece.printStackTrace();
+            ReportTrail.error("Unable to select the item with index as " + index + " from " + customElement );
+        }catch  (Exception e){
+            e.printStackTrace();
+            ReportTrail.error("Unable to select the item with index as " + index + " from " + customElement);
+        }
+    }
 
     public void selectByVisibleText(String itemName){
         try{
-            String eleName = elementName();
-            ReportTrail.info("Selecting " + itemName + " from " + eleName);
+            String eleName = elementNameDropdown();
+            ReportTrail.info("Selecting " + itemName + " from " + eleName + " dropdown");
             Select selector = new Select(customElement);
             selector.selectByVisibleText(itemName);
-            ReportTrail.info("Selected " + itemName + " from " + eleName);
+            ReportTrail.info("Selected " + itemName + " from " + eleName + " dropdown");
         }catch (NoSuchElementException ne){
             ReportTrail.error("Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
@@ -184,11 +201,11 @@ public class CustomWebElement implements Element {
 
     public void selectByValue(String itemValue){
         try{
-            String eleName = elementName();
-            ReportTrail.info("Selecting " + itemValue + " from " + eleName);
+            String eleName = elementNameDropdown();
+            ReportTrail.info("Selecting " + itemValue + " from " + eleName + " dropdown");
             Select selector = new Select(customElement);
             selector.selectByVisibleText(itemValue);
-            ReportTrail.info("Selected " + itemValue + " from " + eleName);
+            ReportTrail.info("Selected " + itemValue + " from " + eleName + " dropdown");
         }catch (NoSuchElementException ne){
             ReportTrail.error("Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
@@ -215,7 +232,6 @@ public class CustomWebElement implements Element {
         }
         return value;
     }
-
 
     public String getText(){
         String value = null;
@@ -261,7 +277,34 @@ public class CustomWebElement implements Element {
         }
     }
 
+    public void keyPress(CharSequence... keysToSend){
+        try{
+            ReportTrail.info("Pressing the key  " + keysToSend );
+            customElement.sendKeys(keysToSend);
+            ReportTrail.info("Pressed the key  " + keysToSend );
+        }catch (NoSuchElementException ne){
+            ReportTrail.error("Element not found with the locator " + customElement);
+        }catch  (Exception e){
+            ReportTrail.error("Unable to Press the key " + keysToSend + " in " + customElement);
+        }
+    }
+
     public void typeAndSelect(String textValue){
+        try{
+            ReportTrail.info("Entering the value as  " + textValue + " in text field");
+            customElement.sendKeys(textValue);
+            customElement.sendKeys(Keys.ARROW_DOWN);
+            customElement.sendKeys(Keys.ENTER);
+            ReportTrail.info("Entered the value as  " + textValue + " in text field");
+            selectByVisibleText(textValue);
+        }catch (NoSuchElementException ne){
+            ReportTrail.error("Element not found with the locator " + customElement);
+        }catch  (Exception e){
+            ReportTrail.error("Unable to enter the text value as " + textValue + " in " + customElement);
+        }
+    }
+
+    public void typeAndPressEnter(String textValue){
         try{
             ReportTrail.info("Entering the value as  " + textValue + " in text field");
             customElement.sendKeys(textValue);
@@ -300,6 +343,14 @@ public class CustomWebElement implements Element {
             }catch (UnsupportedCommandException ue){
                 name = "";
             }
+        }
+        return name;
+    }
+
+    private String elementNameDropdown(){
+        String name = this.customElement.getAttribute("name");
+        if(name.equals("") || name.equals(null)){
+                name = "";
         }
         return name;
     }

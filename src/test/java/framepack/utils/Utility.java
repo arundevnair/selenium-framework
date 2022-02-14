@@ -8,7 +8,11 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
+import javax.imageio.ImageIO;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -130,10 +134,22 @@ public class Utility {
         return formattedDate;
     }
 
-    public static void getAnAdultDOB() {
+    public static String getAnAdultDOB() {
         String years = PropertyReader.getProperty("adultYears");
         String toFormat = PropertyReader.getProperty("dateFormat");
-        getADateOlderThan(years,toFormat);
+        ReportTrail.info("Getting an adult DOB using utility with property as adultYears=" + years + " dateFormat=" + toFormat);
+        String dob = getADateOlderThan(years,toFormat);
+        ReportTrail.info("DOB got as " + dob);
+        return dob;
+    }
+
+    public static String getAChildDOB() {
+        String years = PropertyReader.getProperty("childMaxYears");
+        String toFormat = PropertyReader.getProperty("dateFormat");
+        ReportTrail.info("Getting an child DOB using utility with property as childMaxYears=" + years + " dateFormat=" + toFormat);
+        String dob = getADateOlderThan(years,toFormat);
+        ReportTrail.info("DOB got as " + dob);
+        return dob;
     }
 
     public static LocalDateTime addTime(LocalDateTime time, int timeToAdd, String periodType) {
@@ -290,6 +306,7 @@ public class Utility {
     public static String captureScreenshotB64(WebDriver driver) {
 
         File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+
         String fileName = "";
         try {
             // now copy the screenshot to desired location using copyFile //method
@@ -302,6 +319,7 @@ public class Utility {
                             System.getProperty("user.dir") + File.separator + "ReportTrails" + File.separator,
                             "");
             FileUtils.copyFile(src, new File(saveLocation));
+
             Reporter.log("<a href=\"" + "file:///" + System.getProperty("user.dir")
                     + "/screenshots/" + fileName + "\">Screenshot</a>");
         } catch (IOException e) {
@@ -325,6 +343,37 @@ public class Utility {
 
     }
 
+    public static String captureScreenshotB64FullPage(WebDriver driver) {
+
+        String fileName = "";
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss");
+            String stringDate = dateFormat.format(new Date());
+            fileName = "executionResults/pics/screenshotFullPage-" + stringDate + ".png" ;
+
+            Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(2000)).takeScreenshot(driver);
+            ImageIO.write(screenshot.getImage(),"PNG", new File(fileName));
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        File file = new File(fileName);
+        FileInputStream fileInputStreamReader = null;
+        String b64Encodedfile = null;
+        try {
+            fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            b64Encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
+            ReportTrail.error("RP_MESSAGE#BASE64#{}#{}",b64Encodedfile,
+                    "Failure ScreenPrint");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileName;
+
+    }
 
     public static long getTimeDifference(){
         long diff = 0;
@@ -351,6 +400,40 @@ public class Utility {
         return builder.toString();
     }
 
+    public static String getRandomAlphaUpperCase(int length) {
+        String temp = "abcdefghijklmopqrstuvwxyz";
+        final String ALPHA_NUMERIC_STRING = temp.toUpperCase();
+        StringBuilder builder = new StringBuilder();
+        while (length-- != 0) {
+            int character = (int)(Math.random()*ALPHA_NUMERIC_STRING.length());
+            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+        }
+        return builder.toString();
+    }
+
+    public static String getRandomSpecialChars(int length) {
+        final String ALPHA_NUMERIC_STRING = "!@#$%^&()";
+        StringBuilder builder = new StringBuilder();
+        while (length-- != 0) {
+            int character = (int)(Math.random()*ALPHA_NUMERIC_STRING.length());
+            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+        }
+        return builder.toString();
+    }
+
+    public static String getRandomEmail() {
+        String invalidEmail = getRandomAlphaNumericString(getRandomInt(5,25)) + "@randomgmail.com";
+        ReportTrail.info("A random email generated as : " + invalidEmail);
+        return invalidEmail;
+    }
+
+    public static String getRandomPassword(int length) {
+        String passWd = getRandomAlphaUpperCase(1) + getRandomSpecialChars(1)
+                + getRandomAlphaNumericString(3) + getRandomInt(1,5) + getRandomSpecialChars(length-5);
+        ReportTrail.info("A random password generated as : " + passWd);
+        return passWd;
+    }
+
     public static int getRandomInt(int min, long max) {
         int randVal  = (int)((Math.random()*((max-min)+1))+min);
         return randVal;
@@ -361,10 +444,25 @@ public class Utility {
         return randVal;
     }
 
-
     public static String getRandomCellNumber(){
         String cellNumber = "9"+getRandomLong(100000000,999999999);
         return cellNumber;
     }
+
+    public void scrollDownPage(WebDriver driver) {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("window.scrollBy(0, 350);");
+    }
+
+    public void scrollDownToBottom(WebDriver driver) {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+    }
+
+    public void scrollUpPage(WebDriver driver) {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("window.scrollBy(0, -350);");
+    }
+
 
 }

@@ -7,34 +7,46 @@ public class ReportTrail {
 
     public static Logger logger = LogManager.getLogger(ReportTrail.class);
 
+    String check = "extent";
 
-    public static void info(String message){ logger.info("Info: " + message); }
+
+    public static void info(String message){
+//        logger.info("Info: " + message);
+        ExtentReportTrail.addInfo(message);
+    }
 
     public static void error(String message, Object p0, Object p1){
-        logger.error("Error: " + message);
-        logger.error(message,p0,p1);
+//        logger.error("Error: " + message);
+//        logger.error(message,p0,p1);
+        ExtentReportTrail.addFail( message, p0, p1);
     }
 
     public static void errorScreen(String message, Object p0){
-        logger.error("Error: " + message);
-        logger.error(message,p0);
+//        logger.error("Error: " + message);
+//        logger.error(message,p0);
+        ExtentReportTrail.addFailScreen(message, p0);
     }
 
     public static void fail(String message){
-        logger.fatal("Fail: " + message);
+//        logger.fatal("Fail: " + message);
+        ExtentReportTrail.addFail(message);
     }
 
     public static void error(String message){
-        logger.fatal("Error: " + message);
+//        logger.fatal("Error: " + message);
+        ExtentReportTrail.addFail(message);
     }
 
     public static void pass(String message){
-        logger.info("Pass: " + message);
+//        logger.info("Pass: " + message);
+        ExtentReportTrail.addPass(message);
     }
 
     public static void skip(String message){
-        logger.error("Skip: " + message);
+//        logger.error("Skip: " + message);
+        ExtentReportTrail.addSkip(message);
     }
+
 
     
 }
