@@ -1,13 +1,14 @@
 package reports;
 
+import com.aventstack.extentreports.ExtentReports;
+import framepack.utils.Utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ReportTrail {
 
     public static Logger logger = LogManager.getLogger(ReportTrail.class);
-
-    String check = "extent";
+    ExtentReports extent = ExtentReportTrail.getReport();
 
 
     public static void info(String message){
@@ -25,6 +26,8 @@ public class ReportTrail {
 //        logger.error("Error: " + message);
 //        logger.error(message,p0);
         ExtentReportTrail.addFailScreen(message, p0);
+        System.out.println("filepath");
+
     }
 
     public static void fail(String message){

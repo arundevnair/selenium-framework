@@ -21,6 +21,15 @@ public class StartDriver {
 
     WebDriver driver;
     public static Logger logger = LogManager.getLogger();
+    public ThreadLocal<WebDriver>  commonDriver = new ThreadLocal<>();
+
+    public ThreadLocal<WebDriver> getCommonDriver() {
+        return commonDriver;
+    }
+
+    public void setCommonDriver(ThreadLocal<WebDriver> commonDriver) {
+        this.commonDriver = commonDriver;
+    }
 
     DesiredCapabilities caps;
 
@@ -54,8 +63,9 @@ public class StartDriver {
                 driver.get(envUrl);
 
         }
-        driver.manage().window().maximize();
+//        driver.manage().window().fullscreen();
         OmniDriver.setDriver(driver);
+        OmniDriver.setCommonDriver(driver);
 
     }
 

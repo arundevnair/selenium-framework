@@ -1,6 +1,7 @@
 package framepack.utils;
 
 import org.apache.commons.codec.binary.Base64;
+import reports.PlatformDetection;
 import reports.ReportTrail;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
@@ -278,7 +279,7 @@ public class Utility {
 
     }
 
-    public static String captureScreenshot(WebDriver driver) {
+    public static String captureScreenshotOld(WebDriver driver) {
 
         File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         String fileName = "";
@@ -335,7 +336,7 @@ public class Utility {
             fileInputStreamReader.read(bytes);
             b64Encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
             ReportTrail.error("RP_MESSAGE#BASE64#{}#{}",b64Encodedfile,
-                    "Failure ScreenPrint");
+                    "Failure ScreenPrint Current window");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -343,22 +344,34 @@ public class Utility {
 
     }
 
-    public static String captureScreenshotB64FullPage(WebDriver driver) {
+    public static String captureScreenshotB64FullPageOld(WebDriver driver) {
 
+//        captureScreenshot(driver);
         String fileName = "";
+        String saveLocationb64 = "";
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss");
             String stringDate = dateFormat.format(new Date());
-            fileName = "executionResults/pics/screenshotFullPage-" + stringDate + ".png" ;
+//            fileName = "executionResults/pics/screenshotFullPage-" + stringDate + ".png" ;
+            String saveLocation = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "screenshot"
+                    + stringDate + ".png";
+            saveLocationb64 = saveLocation;
+            System.out.println("saavelocation: " + saveLocation);
+            fileName =
+                    saveLocation.replace(
+                            System.getProperty("user.dir") + File.separator + "ExtentReports" + File.separator,
+                            "");
+            System.out.println("fileNamee: " + fileName);
 
             Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(2000)).takeScreenshot(driver);
-            ImageIO.write(screenshot.getImage(),"PNG", new File(fileName));
+//            ImageIO.write(screenshot.getImage(),"PNG", new File(fileName));
+            ImageIO.write(screenshot.getImage(),"PNG", new File(saveLocationb64));
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
-        File file = new File(fileName);
+        File file = new File(saveLocationb64);
         FileInputStream fileInputStreamReader = null;
         String b64Encodedfile = null;
         try {
@@ -373,6 +386,110 @@ public class Utility {
         }
         return fileName;
 
+    }
+
+    public static String captureScreenshotB64FullPage(WebDriver driver) {
+        ReportTrail.info("captureScreenshotB64FullPage plain called");
+        String fileNameTrimmed = "";
+        String filePathAndNameb64 = "";
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss");
+            String stringDate = dateFormat.format(new Date());
+            filePathAndNameb64 = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "screenshot"
+                    + stringDate + ".png";
+/*            fileNameTrimmed =
+                    filePathAndNameb64.replace(
+                            System.getProperty("user.dir") + File.separator + "executionResults" + File.separator,
+                            "");*/
+            Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(2000)).takeScreenshot(driver);
+            ImageIO.write(screenshot.getImage(),"PNG", new File(filePathAndNameb64));
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        File file = new File(filePathAndNameb64);
+        FileInputStream fileInputStreamReader = null;
+        String b64Encodedfile = null;
+        try {
+            fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            b64Encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
+            ReportTrail.error("RP_MESSAGE#BASE64#{}#{}",b64Encodedfile,
+                    "Failure ScreenPrint Full page");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        return fileNameTrimmed;
+        ReportTrail.info("captureScreenshotB64FullPage plain ended");
+        return filePathAndNameb64;
+
+    }
+
+    public static String captureScreenshotB64FullPage(WebDriver driver, String loc) {
+        ReportTrail.info("captureScreenshotB64FullPage LOC called");
+
+        String fileNameTrimmed = "";
+        String filePathAndNameb64 = "";
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yy_HH_mm_ss");
+            String stringDate = dateFormat.format(new Date());
+            filePathAndNameb64 = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "screenshot"
+                    + stringDate + ".png";
+            fileNameTrimmed =
+                    filePathAndNameb64.replace(
+                            System.getProperty("user.dir") + File.separator + "executionResults" + File.separator,
+                            "");
+            Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(2000)).takeScreenshot(driver);
+            ImageIO.write(screenshot.getImage(),"PNG", new File(filePathAndNameb64));
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        File file = new File(filePathAndNameb64);
+        FileInputStream fileInputStreamReader = null;
+        String b64Encodedfile = null;
+        try {
+            fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            b64Encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
+//            ReportTrail.error("RP_MESSAGE#BASE64#{}#{}",b64Encodedfile,
+//                    "Failure ScreenPrint loc");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ReportTrail.info("captureScreenshotB64FullPage LOC ended");
+        return fileNameTrimmed;
+//        return filePathAndNameb64;
+
+    }
+
+    public static String captureScreenshot(WebDriver driver) {
+
+        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        String fileName = "";
+        try {
+            // now copy the screenshot to desired location using copyFile //method
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss");
+            String stringDate = dateFormat.format(new Date());
+            String saveLocation = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "screenshot"
+                    + stringDate + ".png";
+            System.out.println("saavelocation: " + saveLocation);
+            fileName =
+                    saveLocation.replace(
+                            System.getProperty("user.dir") + File.separator + "ExtentReports" + File.separator,
+                            "");
+            System.out.println("fileNamee: " + fileName);
+            FileUtils.copyFile(src, new File(saveLocation));
+            Reporter.log("<a href=\"" + "file:///" + System.getProperty("user.dir")
+                    + "/screenshots/" + fileName + "\">Screenshot</a>");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return fileName;
     }
 
     public static long getTimeDifference(){

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class TestNgListeners implements ITestListener {
 
-    public  static ExtentReports  extent = ExtentReportTrail.getReport();
+    public  static ExtentReports extent = ExtentReportTrail.getReport();
 
     @BeforeSuite
     public void beforeSuiteActions(){
@@ -25,8 +25,7 @@ public class TestNgListeners implements ITestListener {
         ExtentReportTrail.startReport();
         ReportTrail.info("\n\n\n\n\n\n ====== EXECUTION START - SUITE LEVEL =========== \n\n");
     }
-
-
+    
 
     @AfterSuite
     public void afterSuiteActions(){
@@ -47,7 +46,7 @@ public class TestNgListeners implements ITestListener {
             methodName = result.getMethod().getMethodName();
         }
         ExtentReportTrail.addTest(methodName,result);
-        ExtentReportTrail.addInfo("Test has begun");
+        ExtentReportTrail.addInfo("Test " + methodName + " has begun");
         extent.flush();
     }
 
@@ -61,6 +60,8 @@ public class TestNgListeners implements ITestListener {
         String fileNameFull = Utility.captureScreenshotB64FullPage(OmniDriver.getDriver());
         ReportTrail.errorScreen("Adding screenshot of error screen full page", fileNameFull);
         extent.flush();
+        Utility.sleep(2000);
+        System.out.println("Flushed extent");
     }
 
     public void onTestSkipped(ITestResult result) {

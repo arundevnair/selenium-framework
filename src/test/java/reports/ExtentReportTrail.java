@@ -6,6 +6,8 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.Markup;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import framepack.uipieces.drivers.OmniDriver;
+import framepack.utils.Utility;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,8 +17,10 @@ import org.testng.annotations.BeforeSuite;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class ExtentReportTrail {
 
@@ -25,13 +29,13 @@ public class ExtentReportTrail {
     public static ThreadLocal<ExtentTest> test= new ThreadLocal<>();
     private static final Logger LOGGER = LogManager.getLogger(ExtentReportTrail.class);
 
-    @BeforeSuite
+//    @BeforeSuite
     public static ExtentReports startReport(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("_dd_MM_yyyy(HH_mm_ss)");
         LocalDateTime ldt = LocalDateTime.now();
         String formattedDateTime = ldt.format(formatter);
         System.out.println(formattedDateTime);
-        String reportName = System.getProperty("user.dir") + "/ExtentReports/" + "Report" + formattedDateTime +".html";
+        String reportName = System.getProperty("user.dir") + "/executionResults/" + "ExtentReport" + formattedDateTime +".html";
         System.out.println("reportName: " + reportName);
         ExtentSparkReporter testreporter = new ExtentSparkReporter(reportName);
 /*        try {
@@ -39,6 +43,7 @@ public class ExtentReportTrail {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+
         report = new ExtentReports();
         report.attachReporter(testreporter);
         return report;
@@ -120,6 +125,7 @@ public class ExtentReportTrail {
         } else {
             classTest.get().fail(message);
             LOGGER.error(message,p0,p1);
+
         }
     }
 
@@ -128,9 +134,39 @@ public class ExtentReportTrail {
         if (test.get() != null) {
             test.get().log(Status.FAIL, message);
             LOGGER.error(message, p0);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss_zzz");
+            String stringDate = dateFormat.format(new Date());
+            String location = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "screenshot"
+                    + stringDate + ".png";
+            String fileNameTrimmed = Utility.captureScreenshotB64FullPage(OmniDriver.getDriver(),location);
+//            LOGGER.error("Extent screenshot: ", fileNameTrimmed);
+            test.get().log(Status.INFO,"Screenshot fileNameTrimmed 1",
+                    MediaEntityBuilder.createScreenCaptureFromPath(fileNameTrimmed).build());
+            /*String location = p0.toString();
+            String fileNameTrimmed =
+                    location.replace(
+                            System.getProperty("user.dir") + File.separator + "executionResults" + File.separator,
+                            "");
+            System.out.println("test: fileNameTrimmed is " + fileNameTrimmed);
+//            LOGGER.error("Extent screenshot: ", fileNameTrimmed);
+            test.get().log(Status.INFO,"Screenshot fileNameTrimmed 1",
+                    MediaEntityBuilder.createScreenCaptureFromPath(fileNameTrimmed).build());
+            test.get().log(Status.INFO,"Screenshot location 2",
+                    MediaEntityBuilder.createScreenCaptureFromPath(location).build());*/
+//            addScreenshotB64();
         } else {
             classTest.get().fail(message);
             LOGGER.error(message, p0);
+           /* String location = p0.toString();
+            String fileNameTrimmed =
+                    location.replace(
+                            System.getProperty("user.dir") + File.separator + "executionResults" + File.separator,
+                            "");
+            System.out.println("classTest: fileNameTrimmed is " + fileNameTrimmed);
+//            LOGGER.error("Extent screenshot: ", fileNameTrimmed);
+            classTest.get().log(Status.INFO,"Screenshot",
+                    MediaEntityBuilder.createScreenCaptureFromPath(fileNameTrimmed).build());*/
+//            addScreenshotB64();
         }
     }
 
@@ -144,16 +180,17 @@ public class ExtentReportTrail {
         }
     }
 
-    /**
-     * Base 64 screenshots
-     * @param location The location of the image
-     */
-    public static void addScreenshotB64(String location){
+
+    public static void addScreenshotB64(){
 
         String encodedfile ;
         try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss_zzz");
+            String stringDate = dateFormat.format(new Date());
+            String location = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "screenshot"
+                    + stringDate + ".png";
             File file =
-                    new File(System.getProperty("user.dir") + File.separator + "ExtentReports" + File.separator + location);
+                    new File( location);
             FileInputStream fileInputStreamReader = new FileInputStream(file);
             byte[] bytes = new byte[(int)file.length()];
             fileInputStreamReader.read(bytes);
@@ -166,6 +203,7 @@ public class ExtentReportTrail {
             e.printStackTrace();
         }
     }
+
 
     public static void addPass(String message){
         if (test.get() != null){
