@@ -7,7 +7,7 @@ public class GetEnvironment {
     private static String runEnv;
 
     public static String getEnv(){
-        ReportTrail.info("The execution environment is " + runEnv);
+//        ReportTrail.info("The execution environment is " + runEnv);
         return runEnv;
     }
 

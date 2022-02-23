@@ -20,9 +20,9 @@ public class CustomWebElement implements Element {
             String eleName = elementName();
             ReportTrail.info("Clicking on " + eleName);
             customElement.click();
-            ReportTrail.info("Clicked on " + eleName);
+//            ReportTrail.info("Clicked on " + eleName);
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece) {
             ReportTrail.error("Click intercepted exception for " + customElement);
         }catch  (Exception e){
@@ -36,9 +36,9 @@ public class CustomWebElement implements Element {
             ReportTrail.info("Double clicking on the element " + eleName);
             Actions act = new Actions(driver);
             act.doubleClick(customElement);
-            ReportTrail.info("Double clicked on " + eleName);
+//            ReportTrail.info("Double clicked on " + eleName);
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece) {
             ReportTrail.error("Click intercepted exception for " + customElement);
         }catch  (Exception e){
@@ -51,7 +51,7 @@ public class CustomWebElement implements Element {
             String eleName = elementName();
             ReportTrail.info("Clicking on " + elementType + " " + eleName);
             customElement.click();
-            ReportTrail.info("Clicked on " + elementType + " "+ eleName);
+//            ReportTrail.info("Clicked on " + elementType + " "+ eleName);
         }catch (NoSuchElementException ne){
             ReportTrail.error("Element " + elementType + " not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
@@ -81,9 +81,9 @@ public class CustomWebElement implements Element {
             String eleName = elementName();
             ReportTrail.info("Clicking on " + eleName + " using JsExecutor");
             ((JavascriptExecutor)driver).executeScript("arguments[0].click();", customElement);
-            ReportTrail.info("Clicked on " + eleName + " using JsExecutor");
+//            ReportTrail.info("Clicked on " + eleName + " using JsExecutor");
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
             ReportTrail.error("Click intercepted exception for " + customElement);
         }catch  (Exception e){
@@ -104,7 +104,7 @@ public class CustomWebElement implements Element {
                 ReportTrail.info("The element with locator " + customElement + " is NOT displayed");
             }
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         }catch (StaleElementReferenceException ne){
             ReportTrail.error("Element became stale " + customElement);
         } catch (ElementClickInterceptedException ece){
@@ -128,7 +128,7 @@ public class CustomWebElement implements Element {
                 ReportTrail.error("The element with locator " + customElement + " is NOT enabled");
             }
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         }catch (StaleElementReferenceException ne){
             ReportTrail.error("Element became stale " + customElement);
         } catch (ElementClickInterceptedException ece){
@@ -154,7 +154,7 @@ public class CustomWebElement implements Element {
                 ReportTrail.error("The element with locator " + customElement + " is NOT checked");
             }
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         }catch (StaleElementReferenceException ne){
             ReportTrail.error("Element became stale " + customElement);
         } catch (ElementClickInterceptedException ece){
@@ -171,9 +171,9 @@ public class CustomWebElement implements Element {
             ReportTrail.info("Selecting item with index as " + index + " from " + eleName + " dropdown");
             Select selector = new Select(customElement);
             selector.selectByIndex(index);
-            ReportTrail.info("Selected item with index as " + index + " from " + eleName + " dropdown");
+//            ReportTrail.info("Selected item with index as " + index + " from " + eleName + " dropdown");
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
             ece.printStackTrace();
             ReportTrail.error("Unable to select the item with index as " + index + " from " + customElement );
@@ -189,9 +189,9 @@ public class CustomWebElement implements Element {
             ReportTrail.info("Selecting " + itemName + " from " + eleName + " dropdown");
             Select selector = new Select(customElement);
             selector.selectByVisibleText(itemName);
-            ReportTrail.info("Selected " + itemName + " from " + eleName + " dropdown");
+//            ReportTrail.info("Selected " + itemName + " from " + eleName + " dropdown");
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
             ReportTrail.error("Unable to select the item " + itemName + " from " + customElement);
         }catch  (Exception e){
@@ -205,9 +205,9 @@ public class CustomWebElement implements Element {
             ReportTrail.info("Selecting " + itemValue + " from " + eleName + " dropdown");
             Select selector = new Select(customElement);
             selector.selectByVisibleText(itemValue);
-            ReportTrail.info("Selected " + itemValue + " from " + eleName + " dropdown");
+//            ReportTrail.info("Selected " + itemValue + " from " + eleName + " dropdown");
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
             ReportTrail.error("Unable to select the item " + itemValue + " from " + customElement);
         }catch  (Exception e){
@@ -222,9 +222,9 @@ public class CustomWebElement implements Element {
             ReportTrail.info("Getting current selected option from " + eleName);
             Select selector = new Select(customElement);
             value =  selector.getFirstSelectedOption().getText();
-            ReportTrail.info("Selected value for " + eleName + " is " + value);
+//            ReportTrail.info("Selected value for " + eleName + " is " + value);
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
             ReportTrail.error("Unable to get current selected option from " + customElement);
         }catch  (Exception e){
@@ -238,9 +238,9 @@ public class CustomWebElement implements Element {
         try{
             ReportTrail.info("Getting text value from " + elementName());
             value =  customElement.getText();
-            ReportTrail.info("text value from " + elementName() + " is " + value);
+//            ReportTrail.info("text value from " + elementName() + " is " + value);
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
             ReportTrail.error("Unable to get text from " + customElement);
         }catch  (Exception e){
@@ -256,7 +256,7 @@ public class CustomWebElement implements Element {
             value =  customElement.getAttribute(attribute);
             ReportTrail.info(attribute + " value from " + elementName() + " is " + value);
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         } catch (ElementClickInterceptedException ece){
             ReportTrail.error("Unable to get " + attribute + " from " + customElement);
         }catch  (Exception e){
@@ -267,11 +267,11 @@ public class CustomWebElement implements Element {
 
     public void type(String textValue){
         try{
-            ReportTrail.info("Entering the value as  " + textValue + " in text field");
+            ReportTrail.info("Entering the value as  " + textValue + " in text field " + elementName());
             customElement.sendKeys(textValue);
-            ReportTrail.info("Entered the value as  " + textValue + " in text field");
+//            ReportTrail.info("Entered the value as  " + textValue + " in text field");
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         }catch  (Exception e){
             ReportTrail.error("Unable to enter the text value as " + textValue + " in " + customElement);
         }
@@ -281,24 +281,24 @@ public class CustomWebElement implements Element {
         try{
             ReportTrail.info("Pressing the key  " + keysToSend );
             customElement.sendKeys(keysToSend);
-            ReportTrail.info("Pressed the key  " + keysToSend );
+//            ReportTrail.info("Pressed the key  " + keysToSend );
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         }catch  (Exception e){
             ReportTrail.error("Unable to Press the key " + keysToSend + " in " + customElement);
         }
     }
 
-    public void typeAndSelect(String textValue){
+    public void typeAndDownEnterToSelect(String textValue){
         try{
             ReportTrail.info("Entering the value as  " + textValue + " in text field");
             customElement.sendKeys(textValue);
             customElement.sendKeys(Keys.ARROW_DOWN);
             customElement.sendKeys(Keys.ENTER);
-            ReportTrail.info("Entered the value as  " + textValue + " in text field");
+//            ReportTrail.info("Entered the value as  " + textValue + " in text field");
             selectByVisibleText(textValue);
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         }catch  (Exception e){
             ReportTrail.error("Unable to enter the text value as " + textValue + " in " + customElement);
         }
@@ -309,10 +309,23 @@ public class CustomWebElement implements Element {
             ReportTrail.info("Entering the value as  " + textValue + " in text field");
             customElement.sendKeys(textValue);
             customElement.sendKeys(Keys.ENTER);
-            ReportTrail.info("Entered the value as  " + textValue + " in text field");
+//            ReportTrail.info("Entered the value as  " + textValue + " in text field");
+        }catch (NoSuchElementException ne){
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
+        }catch  (Exception e){
+            ReportTrail.error("Unable to enter the text value as " + textValue + " in " + customElement);
+        }
+    }
+
+    public void typeAndPressEnterToSelect(String textValue){
+        try{
+            ReportTrail.info("Entering the value as  " + textValue + " in text field");
+            customElement.sendKeys(textValue);
+            customElement.sendKeys(Keys.ENTER);
+//            ReportTrail.info("Entered the value as  " + textValue + " in text field");
             selectByVisibleText(textValue);
         }catch (NoSuchElementException ne){
-            ReportTrail.error("Element not found with the locator " + customElement);
+            ReportTrail.info("ERROR: -- Element not found with the locator " + customElement);
         }catch  (Exception e){
             ReportTrail.error("Unable to enter the text value as " + textValue + " in " + customElement);
         }
@@ -322,7 +335,7 @@ public class CustomWebElement implements Element {
         try{
             ReportTrail.info("Clearing the value in text field ");
             customElement.clear();
-            ReportTrail.info("Cleared the value in text field ");
+//            ReportTrail.info("Cleared the value in text field ");
         }catch (NoSuchElementException ne){
             ReportTrail.error("Not able to clear the text field");
         }catch  (Exception e){
@@ -338,11 +351,17 @@ public class CustomWebElement implements Element {
     private String elementName(){
         String name = this.customElement.getText();
         if(name.equals("") || name.equals(null)){
-            try{
-                name = this.customElement.getAccessibleName();
-            }catch (UnsupportedCommandException ue){
-                name = "";
+            if (name.equals("") || name.equals((Object)null)) {
+                try{
+                    name = this.customElement.getAccessibleName();
+                }catch (UnsupportedCommandException ue){
+                    name = this.customElement.getAttribute("name");
+                    if(name.equals("") || name.equals(null)){
+                        name = "";
+                    }
+                }
             }
+
         }
         return name;
     }

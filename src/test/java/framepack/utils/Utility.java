@@ -12,6 +12,7 @@ import org.testng.Reporter;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategy;
 
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -29,6 +30,8 @@ public class Utility {
     static LocalDateTime startTime;
     static LocalDateTime endTime;
     static long timeDifference;
+
+
     public Utility(WebDriver driver){
         this.driver = driver;
     }
@@ -427,21 +430,24 @@ public class Utility {
 
     }
 
-    public static String captureScreenshotB64FullPage(WebDriver driver, String loc) {
-        ReportTrail.info("captureScreenshotB64FullPage LOC called");
-
+    public static String captureScreenshotB64FullPageExtent(WebDriver driver) {
         String fileNameTrimmed = "";
         String filePathAndNameb64 = "";
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yy_HH_mm_ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH_mm_ss");
             String stringDate = dateFormat.format(new Date());
-            filePathAndNameb64 = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "screenshot"
+            filePathAndNameb64 = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "ExtentSreenshot"
                     + stringDate + ".png";
             fileNameTrimmed =
                     filePathAndNameb64.replace(
                             System.getProperty("user.dir") + File.separator + "executionResults" + File.separator,
                             "");
-            Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(2000)).takeScreenshot(driver);
+
+            Object output = ((JavascriptExecutor) driver).executeScript("return window.devicePixelRatio");
+            String value = String.valueOf(output);
+            float windowDPR = Float.parseFloat(value);
+//            ShootingStrategy shootingStrategyScreen = ShootingStrategies.viewportPasting(ShootingStrategies.scaling(windowDPR), 100);
+            Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(ShootingStrategies.scaling(windowDPR),2000)).takeScreenshot(driver);
             ImageIO.write(screenshot.getImage(),"PNG", new File(filePathAndNameb64));
 
         } catch (IOException e) {
@@ -450,21 +456,15 @@ public class Utility {
 
         File file = new File(filePathAndNameb64);
         FileInputStream fileInputStreamReader = null;
-        String b64Encodedfile = null;
         try {
             fileInputStreamReader = new FileInputStream(file);
             byte[] bytes = new byte[(int)file.length()];
             fileInputStreamReader.read(bytes);
-            b64Encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
-//            ReportTrail.error("RP_MESSAGE#BASE64#{}#{}",b64Encodedfile,
-//                    "Failure ScreenPrint loc");
         } catch (IOException e) {
             e.printStackTrace();
         }
         ReportTrail.info("captureScreenshotB64FullPage LOC ended");
         return fileNameTrimmed;
-//        return filePathAndNameb64;
-
     }
 
     public static String captureScreenshot(WebDriver driver) {
@@ -500,7 +500,7 @@ public class Utility {
             endTime = null;
             return diff;
         }catch (Exception e){
-            ReportTrail.error("Couldn't calculate the time difference correctly. startTime was set as "
+            ReportTrail.info("Error: Couldn't calculate the time difference correctly. startTime was set as "
                     + startTime + " and endTime was set as " + endTime);
             return 999999999;
         }

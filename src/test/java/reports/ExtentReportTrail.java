@@ -12,7 +12,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;
-import org.testng.annotations.BeforeSuite;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -138,35 +137,17 @@ public class ExtentReportTrail {
             String stringDate = dateFormat.format(new Date());
             String location = PlatformDetection.getlocation(PlatformDetection.getOS())[1] + "screenshot"
                     + stringDate + ".png";
-            String fileNameTrimmed = Utility.captureScreenshotB64FullPage(OmniDriver.getDriver(),location);
+            String fileNameTrimmed = Utility.captureScreenshotB64FullPageExtent(OmniDriver.getDriver());
 //            LOGGER.error("Extent screenshot: ", fileNameTrimmed);
-            test.get().log(Status.INFO,"Screenshot fileNameTrimmed 1",
+            test.get().log(Status.INFO,"Extent Screenshot Failure",
                     MediaEntityBuilder.createScreenCaptureFromPath(fileNameTrimmed).build());
-            /*String location = p0.toString();
-            String fileNameTrimmed =
-                    location.replace(
-                            System.getProperty("user.dir") + File.separator + "executionResults" + File.separator,
-                            "");
-            System.out.println("test: fileNameTrimmed is " + fileNameTrimmed);
-//            LOGGER.error("Extent screenshot: ", fileNameTrimmed);
-            test.get().log(Status.INFO,"Screenshot fileNameTrimmed 1",
-                    MediaEntityBuilder.createScreenCaptureFromPath(fileNameTrimmed).build());
-            test.get().log(Status.INFO,"Screenshot location 2",
-                    MediaEntityBuilder.createScreenCaptureFromPath(location).build());*/
-//            addScreenshotB64();
         } else {
             classTest.get().fail(message);
             LOGGER.error(message, p0);
-           /* String location = p0.toString();
-            String fileNameTrimmed =
-                    location.replace(
-                            System.getProperty("user.dir") + File.separator + "executionResults" + File.separator,
-                            "");
-            System.out.println("classTest: fileNameTrimmed is " + fileNameTrimmed);
+            String fileNameTrimmed = Utility.captureScreenshotB64FullPageExtent(OmniDriver.getDriver());
 //            LOGGER.error("Extent screenshot: ", fileNameTrimmed);
-            classTest.get().log(Status.INFO,"Screenshot",
-                    MediaEntityBuilder.createScreenCaptureFromPath(fileNameTrimmed).build());*/
-//            addScreenshotB64();
+            classTest.get().log(Status.INFO,"Extent Screenshot Failure",
+                    MediaEntityBuilder.createScreenCaptureFromPath(fileNameTrimmed).build());
         }
     }
 
@@ -181,6 +162,7 @@ public class ExtentReportTrail {
     }
 
 
+    @Deprecated
     public static void addScreenshotB64(){
 
         String encodedfile ;

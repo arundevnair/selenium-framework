@@ -1,5 +1,7 @@
 package framepack.uipieces.drivers;
 
+import framepack.utils.Utility;
+import org.openqa.selenium.Dimension;
 import reports.ReportTrail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,7 +65,7 @@ public class StartDriver {
                 driver.get(envUrl);
 
         }
-//        driver.manage().window().fullscreen();
+
         OmniDriver.setDriver(driver);
         OmniDriver.setCommonDriver(driver);
 

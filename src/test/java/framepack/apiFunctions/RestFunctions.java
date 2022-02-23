@@ -1,6 +1,7 @@
 package framepack.apiFunctions;
 
 
+import io.restassured.http.ContentType;
 import reports.ReportTrail;
 import io.restassured.RestAssured;
 import io.restassured.config.HttpClientConfig;
@@ -26,7 +27,33 @@ public class RestFunctions {
         return instanceOfRestFunctions;
     }
 
-    public Response post(RequestSpecification requestSpec, String APIUrl) {
+    public static Response get(String url) {
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .relaxedHTTPSValidation()
+                .header("Content-type", "application/json")
+                .when()
+                .get(url)
+                .then()
+                .extract().response();
+        return response;
+    }
+
+    public static Response get(String url,String Authheader) {
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .relaxedHTTPSValidation()
+                .header("Content-type", "application/json")
+                .header("Authorization",Authheader)
+                .when()
+                .get(url)
+                .then()
+                .extract().response();
+
+        return response;
+    }
+
+/*    public Response post(RequestSpecification requestSpec, String APIUrl) {
         Response resp = given().auth().preemptive().basic("", "").spec(requestSpec).when().post(APIUrl);
         return resp;
     }
@@ -55,14 +82,14 @@ public class RestFunctions {
         return resp;
     }
 
-    /**
+    *//**
      * Get the response from the API
      *
      * @param type The type of the response
      * @param postURL The API URL
      * @param body The JSON body, provide as a string
      * @return The response
-     */
+     *//*
     public Response getAPIResponse(String type, String postURL, String body) {
         Response response = null;
         RestAssuredConfig config =
@@ -100,5 +127,5 @@ public class RestFunctions {
             throw new SkipException("No response received from API");
         }
         return response;
-    }
+    }*/
 }

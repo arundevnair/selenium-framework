@@ -57,7 +57,7 @@ public class TestNgListeners implements ITestListener {
 
     public void onTestFailure(ITestResult result) {
         ReportTrail.info("Test Failed: " + result.getMethod().getMethodName() + "\n\n\n\n");
-        String fileNameFull = Utility.captureScreenshotB64FullPage(OmniDriver.getDriver());
+        String fileNameFull = Utility.captureScreenshotB64(OmniDriver.getDriver());
         ReportTrail.errorScreen("Adding screenshot of error screen full page", fileNameFull);
         extent.flush();
         Utility.sleep(2000);
