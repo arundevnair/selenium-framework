@@ -179,7 +179,6 @@ public class ExcelReader {
         return true;
     }
 
-
     public static boolean updateAllDataOfTheRow(String fileName, String sheetName, String rowKeyName,  ArrayList<String> rowOfData) throws IOException {
 
         Workbook excelWorkBook = getWorkBookData(fileName);

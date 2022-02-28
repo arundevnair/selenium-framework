@@ -2,6 +2,7 @@ package framepack.apiFunctions;
 
 
 import io.restassured.http.ContentType;
+import io.restassured.http.Headers;
 import reports.ReportTrail;
 import io.restassured.RestAssured;
 import io.restassured.config.HttpClientConfig;
@@ -28,33 +29,110 @@ public class RestFunctions {
     }
 
     public static Response get(String url) {
+        ReportTrail.info("Get Request on url" + url);
         Response response = given()
-                .contentType(ContentType.JSON)
                 .relaxedHTTPSValidation()
-                .header("Content-type", "application/json")
+                .contentType(ContentType.JSON)
+//                .header("Content-type", "application/json")
                 .when()
                 .get(url)
                 .then()
                 .extract().response();
+        ReportTrail.info("Response: ==>> \n" + response.asString());
         return response;
     }
 
-    public static Response get(String url,String Authheader) {
+    public static Response get(String url,String authHeader) {
+        ReportTrail.info("Get Request on url" + url);
         Response response = given()
-                .contentType(ContentType.JSON)
                 .relaxedHTTPSValidation()
-                .header("Content-type", "application/json")
-                .header("Authorization",Authheader)
+                .contentType(ContentType.JSON)
+                .header("Authorization",authHeader)
                 .when()
                 .get(url)
                 .then()
                 .extract().response();
-
+        ReportTrail.info("Response: ==>> \n" + response.asString());
         return response;
     }
 
-/*    public Response post(RequestSpecification requestSpec, String APIUrl) {
-        Response resp = given().auth().preemptive().basic("", "").spec(requestSpec).when().post(APIUrl);
+    public static Response post(String url,String requestBody) {
+        ReportTrail.info("Post Request on url" + url);
+        ReportTrail.info(".. with the body as request body: \n" + requestBody);
+        Response response = given()
+                .relaxedHTTPSValidation()
+                .contentType(ContentType.JSON)
+                .and()
+                .body(requestBody)
+                .when()
+                .post(url)
+                .then()
+                .extract().response();
+        ReportTrail.info("Response: ==>> \n" + response.asString());
+        return response;
+    }
+
+    public static Response post(String url, String requestBody, Headers headers) {
+        ReportTrail.info("Post Request on url" + url);
+        ReportTrail.info(".. with the body as request body: \n" + requestBody);
+        Response response = given()
+                .relaxedHTTPSValidation()
+                .contentType(ContentType.JSON)
+                .headers(headers)
+                .and()
+                .body(requestBody)
+                .when()
+                .post(url)
+                .then()
+                .extract().response();
+        ReportTrail.info("Response: ==>> \n" + response.asString());
+        return response;
+    }
+
+    public static Response put(String url) {
+        ReportTrail.info("Put Request on url" + url);
+        Response response = given()
+                .relaxedHTTPSValidation()
+                .contentType(ContentType.JSON)
+                .and()
+                .when()
+                .put(url)
+                .then()
+                .extract().response();
+        ReportTrail.info("Response: ==>> \n" + response.asString());
+        return response;
+    }
+
+    public static Response put(String url,String requestBody,Headers headers) {
+        ReportTrail.info("Put Request on url" + url);
+        Response response = given()
+                .relaxedHTTPSValidation()
+                .contentType(ContentType.JSON)
+                .headers(headers)
+                .and()
+                .body(requestBody)
+                .when()
+                .put(url)
+                .then()
+                .extract().response();
+
+        return response;
+
+    }
+
+
+/*
+
+
+    public Response post(RequestSpecification requestSpec, String APIUrl) {
+        Response resp = given()
+                .relaxedHTTPSValidation()
+                .auth()
+                .preemptive()
+                .basic("", "")
+                .spec(requestSpec)
+                .when()
+                .post(APIUrl);
         return resp;
     }
 
@@ -70,7 +148,6 @@ public class RestFunctions {
                         .post(APIUrl);
         return resp;
     }
-
     public Response get(Header auth, String APIUrl) {
         Response resp = given().auth().preemptive().basic("", "").header(auth).when().get(APIUrl);
         return resp;

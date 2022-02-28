@@ -1,21 +1,22 @@
 package framepack.utils;
 
 import org.apache.commons.codec.binary.Base64;
-import reports.PlatformDetection;
-import reports.ReportTrail;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
+import reports.PlatformDetection;
+import reports.ReportTrail;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
-import ru.yandex.qatools.ashot.shooting.ShootingStrategy;
 
 import javax.imageio.ImageIO;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -34,6 +35,28 @@ public class Utility {
 
     public Utility(WebDriver driver){
         this.driver = driver;
+    }
+
+    public static WebElement getWebElement(WebDriver driver, String locatorsType, String locatorValue) {
+        locatorsType = locatorsType.toLowerCase(Locale.ENGLISH);
+        WebElement webElement = null;
+        try {
+            switch (locatorsType) {
+                case "xpath":
+                    webElement = driver.findElement(By.xpath(locatorValue));
+                    break;
+                case "css":
+                    webElement = driver.findElement(By.cssSelector(locatorValue));
+                    break;
+                case "linktext":
+                    webElement = driver.findElement(By.linkText(locatorValue));
+                    break;
+            }
+        } catch (NoSuchElementException nse) {
+            ReportTrail.info("Unable to find the element with the  locator " + locatorValue + " of the"
+                    + " locator type " + locatorsType);
+        }
+        return webElement;
     }
 
     public static void getTodayDate() {
@@ -81,28 +104,6 @@ public class Utility {
     }
 
 
-    public static WebElement getWebElement(WebDriver driver, String locatorsType, String locatorValue) {
-        locatorsType = locatorsType.toLowerCase(Locale.ENGLISH);
-        WebElement webElement = null;
-        try {
-            switch (locatorsType) {
-                case "xpath":
-                    webElement = driver.findElement(By.xpath(locatorValue));
-                    break;
-                case "css":
-                    webElement = driver.findElement(By.cssSelector(locatorValue));
-                    break;
-                case "linktext":
-                    webElement = driver.findElement(By.linkText(locatorValue));
-                    break;
-            }
-        } catch (NoSuchElementException nse) {
-            ReportTrail.info("Unable to find the element with the  locator " + locatorValue + " of the"
-                    + " locator type " + locatorsType);
-        }
-        return webElement;
-    }
-
     public static void sleep(long milliSeconds){
         try{
             ReportTrail.info("Sleep start for " + milliSeconds + " milliSeconds");
@@ -111,6 +112,7 @@ public class Utility {
         }catch (Exception e){
             System.out.println("Encountered error in sleep method in Utility");
         }
+
     }
 
     public static String getADateOlderThan(String years, String toFormat){
@@ -136,6 +138,13 @@ public class Utility {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(toFormat);
         String formattedDate = ldt.format(formatter);
         return formattedDate;
+    }
+
+    public static LocalDate convertStringToDate(String strDate, String toFormat) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(toFormat);
+        LocalDate localDateTime = LocalDate.parse(strDate, formatter);
+        System.out.println(localDateTime);
+        return localDateTime;
     }
 
     public static String getAnAdultDOB() {
@@ -216,6 +225,9 @@ public class Utility {
         return lastDateOfMonth.atStartOfDay();
     }
 
+
+
+
     public static void waitUntilFound(WebDriver driver, WebElement el, String elementFriendlyName, int timeoutInSeconds) {
         ReportTrail.info("Waiting for " + timeoutInSeconds + " seconds for " + elementFriendlyName + " element to be found");
         startTime = LocalDateTime.now();
@@ -241,7 +253,6 @@ public class Utility {
 //            ReportTrail.addError(e.getMessage());
         }
     }
-
 
     public static void waitUntilNotPresent(WebDriver driver, WebElement el, String elementFriendlyName, int timeoutInSeconds) {
         ReportTrail.info("Waiting for " + timeoutInSeconds + " seconds for " + elementFriendlyName + " element to disappear");
@@ -281,6 +292,8 @@ public class Utility {
         }
 
     }
+
+
 
     public static String captureScreenshotOld(WebDriver driver) {
 
