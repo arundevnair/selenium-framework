@@ -1,7 +1,10 @@
 package framepack.uipieces.drivers;
 
+import framepack.utils.PropertyReader;
 import framepack.utils.Utility;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.safari.SafariOptions;
 import reports.ReportTrail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,12 +41,10 @@ public class StartDriver {
 
     public void launchDriver(DriverType browser, String envUrl){
 
+        String headlessConfig = PropertyReader.getProperty("headless");
+        boolean checkHeadless = headlessConfig.equalsIgnoreCase("true")?true:false;
+
         switch (browser){
-            case CHROME:
-                chromedriver().setup();
-                driver = new ChromeDriver();
-                driver.get(envUrl);
-                break;
             case EDGE:
                 edgedriver().setup();
                 driver = new EdgeDriver();
@@ -59,11 +60,28 @@ public class StartDriver {
                 driver = new SafariDriver();
                 driver.get(envUrl);
                 break;
+            case CHROME:
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromedriver().setup();
+                if(checkHeadless){
+                    chromeOptions.addArguments("--headless");
+                    driver = new ChromeDriver(chromeOptions);
+                }else {
+                    driver = new ChromeDriver();
+                }
+                driver.get(envUrl);
+                break;
             case FIREFOX:
                 firefoxdriver().setup();
-                driver = new FirefoxDriver();
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                if (checkHeadless){
+                    firefoxOptions.addArguments("--headless");
+                    driver = new FirefoxDriver(firefoxOptions);
+                }else {
+                    driver = new FirefoxDriver();
+                }
                 driver.get(envUrl);
-
+                break;
         }
 
         OmniDriver.setDriver(driver);

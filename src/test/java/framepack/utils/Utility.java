@@ -1,5 +1,6 @@
 package framepack.utils;
 
+import framepack.uipieces.drivers.OmniDriver;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Utility {
 
@@ -59,10 +61,10 @@ public class Utility {
         return webElement;
     }
 
-    public static void getTodayDate() {
+    public static String getTodayDate() {
         String region = PropertyReader.getProperty("country");
         String toFormat = PropertyReader.getProperty("dateFormat");
-        getTodayDateByRegion(region,toFormat);
+        return getTodayDateByRegion(region,toFormat);
     }
 
     public static String getTodayDateByRegion(String region, String toFormat) {
@@ -123,7 +125,7 @@ public class Utility {
         int rMonths = random.nextInt(11)+1;
         int rDays = random.nextInt(27)+1;
 
-        LocalDateTime ldt = LocalDateTime.now();
+        LocalDate ldt = LocalDate.now();
         ldt = ldt.minusYears(rYears);
         ldt = ldt.minusMonths(-rMonths);
         ldt = ldt.minusDays(rDays);
@@ -133,7 +135,7 @@ public class Utility {
         return date;
     }
 
-    public static String convertDateToString(LocalDateTime ldt, String toFormat){
+    public static String convertDateToString(LocalDate ldt, String toFormat){
         //        Converting the calculated time the given time format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(toFormat);
         String formattedDate = ldt.format(formatter);
@@ -188,6 +190,60 @@ public class Utility {
         return newTime;
     }
 
+    public static LocalDate addLocalDate(LocalDate date, int timeToAdd, String periodType) {
+        periodType = periodType.toLowerCase(Locale.ENGLISH);
+        LocalDate newDate = null;
+        switch (periodType) {
+            case "days":
+                newDate = date.plusDays(timeToAdd);
+                break;
+            case "months":
+                newDate = date.plusMonths(timeToAdd);
+                break;
+            case "years":
+                newDate = date.plusYears(timeToAdd);
+                break;
+        }
+        return newDate;
+    }
+
+    public static String addDays(String currentDate, int daysToAdd){
+        String dateFormat = PropertyReader.getProperty("dateFormat");
+        return addDays(currentDate,daysToAdd,dateFormat);
+    }
+
+    public static String addDays(String currentDate, int monthsToAdd, String dateFormat){
+        LocalDate ldt = convertStringToDate(currentDate,dateFormat);
+        LocalDate newDateLdt =  addLocalDate(ldt,monthsToAdd,"days");
+        String newDate = convertDateToString(newDateLdt,dateFormat);
+        return newDate;
+    }
+
+    public static String addMonths(String currentDate, int monthsToAdd){
+        String dateFormat = PropertyReader.getProperty("dateFormat");
+        return addMonths(currentDate,monthsToAdd,dateFormat);
+    }
+
+
+    public static String addMonths(String currentDate, int monthsToAdd, String dateFormat){
+        LocalDate ldt = convertStringToDate(currentDate,dateFormat);
+        LocalDate newDateLdt =  addLocalDate(ldt,monthsToAdd,"months");
+        String newDate = convertDateToString(newDateLdt,dateFormat);
+        return newDate;
+    }
+
+    public static String addYears(String currentDate, int yearsToAdd){
+        String dateFormat = PropertyReader.getProperty("dateFormat");
+        return addYears(currentDate,yearsToAdd,dateFormat);
+    }
+
+    public static String addYears(String currentDate, int yearsToAdd, String dateFormat){
+        LocalDate ldt = convertStringToDate(currentDate,dateFormat);
+        LocalDate newDateLdt =  addLocalDate(ldt,yearsToAdd,"years");
+        String newDate = convertDateToString(newDateLdt,dateFormat);
+        return newDate;
+    }
+
     public static int getNumberOfDaysInMonth(String year, String month) {
         ReportTrail.info("Getting the number of days in the month " + month + " of the year " + year);
         int numberOfDays = 0;
@@ -226,8 +282,6 @@ public class Utility {
     }
 
 
-
-
     public static void waitUntilFound(WebDriver driver, WebElement el, String elementFriendlyName, int timeoutInSeconds) {
         ReportTrail.info("Waiting for " + timeoutInSeconds + " seconds for " + elementFriendlyName + " element to be found");
         startTime = LocalDateTime.now();
@@ -251,6 +305,33 @@ public class Utility {
         } catch (Exception e) {
             ReportTrail.error("Encountered error while waiting for " + elementFriendlyName + " to be clickable");
 //            ReportTrail.addError(e.getMessage());
+        }
+    }
+    public static void waitUntilClickable(WebElement el, String elementFriendlyName, int timeoutInSeconds) {
+        WebDriver driver = OmniDriver.getDriver();
+        ReportTrail.info("Waiting for " + timeoutInSeconds + " seconds for " + elementFriendlyName + " element to be clickable");
+        startTime = LocalDateTime.now();
+        try {
+//            new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds)).until(ExpectedConditions.elementToBeClickable(el));
+            new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds)).until(driver1 -> ExpectedConditions.elementToBeClickable(el).apply(driver));
+            endTime = LocalDateTime.now();
+            ReportTrail.info("The element " + elementFriendlyName + " found as to be clickable in " + getTimeDifference() + " seconds");
+        } catch (Exception e) {
+            ReportTrail.error("Encountered error while waiting for " + elementFriendlyName + " to be clickable");
+//            ReportTrail.addError(e.getMessage());
+        }
+    }
+
+    public static void waitUntilPageLoads( int timeoutInSeconds) {
+        WebDriver driver = OmniDriver.getDriver();
+        ReportTrail.info("Waiting for " + timeoutInSeconds + " seconds for page to load");
+        startTime = LocalDateTime.now();
+        try {
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(timeoutInSeconds));
+            endTime = LocalDateTime.now();
+            ReportTrail.info("The page loaded in " + getTimeDifference() + " seconds");
+        } catch (Exception e) {
+            ReportTrail.error("Encountered error while waiting for page to load");
         }
     }
 
@@ -293,7 +374,47 @@ public class Utility {
 
     }
 
+    public static void waitUntilAttributeChange( WebElement el, String attribute, String expectedValue, int timeoutInSeconds) {
+        WebDriver driver = OmniDriver.getDriver();
+        ReportTrail.info("Waiting for " + timeoutInSeconds + " seconds for attribute " + attribute + " to change as " + expectedValue);
+        startTime = LocalDateTime.now();
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds)).until(new ExpectedCondition<Boolean>() {
+                public Boolean apply(WebDriver driver) {
+                        String attrValue = el.getAttribute(attribute);
+                        if (attrValue.equals(expectedValue))
+                            return true;
+                        else
+                            return false;
+                    }
+                    });
+            endTime = LocalDateTime.now();
+            ReportTrail.info("The attribute changed in " + getTimeDifference() + " seconds");
+        } catch (Exception e) {
+            ReportTrail.error("Encountered error while waiting for " + attribute + " attribute to change");
+        }
+    }
 
+    public static void waitUntilAttributePartChange( WebElement el, String attribute, String expectedValue, int timeoutInSeconds) {
+        WebDriver driver = OmniDriver.getDriver();
+        ReportTrail.info("Waiting for " + timeoutInSeconds + " seconds for a part of attribute " + attribute + " to change as " + expectedValue);
+        startTime = LocalDateTime.now();
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds)).until(new ExpectedCondition<Boolean>() {
+                public Boolean apply(WebDriver driver) {
+                    String attrValue = el.getAttribute(attribute);
+                    if (attrValue.contains(expectedValue))
+                        return true;
+                    else
+                        return false;
+                }
+            });
+            endTime = LocalDateTime.now();
+            ReportTrail.info("The attribute changed in " + getTimeDifference() + " seconds");
+        } catch (Exception e) {
+            ReportTrail.error("Encountered error while waiting for " + attribute + " attribute to change");
+        }
+    }
 
     public static String captureScreenshotOld(WebDriver driver) {
 

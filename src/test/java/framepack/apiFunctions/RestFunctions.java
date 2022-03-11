@@ -42,12 +42,26 @@ public class RestFunctions {
         return response;
     }
 
-    public static Response get(String url,String authHeader) {
+/*    public static Response get(String url,String authHeader) {
         ReportTrail.info("Get Request on url" + url);
         Response response = given()
                 .relaxedHTTPSValidation()
                 .contentType(ContentType.JSON)
                 .header("Authorization",authHeader)
+                .when()
+                .get(url)
+                .then()
+                .extract().response();
+        ReportTrail.info("Response: ==>> \n" + response.asString());
+        return response;
+    }*/
+
+    public static Response get(String url, Headers headers) {
+        ReportTrail.info("Get Request on url" + url);
+        Response response = given()
+                .relaxedHTTPSValidation()
+                .contentType(ContentType.JSON)
+                .headers(headers)
                 .when()
                 .get(url)
                 .then()

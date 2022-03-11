@@ -1,9 +1,15 @@
 package framepack.uipieces.elements;
 
+import framepack.uipieces.drivers.OmniDriver;
+import framepack.utils.WaitForElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import reports.ReportTrail;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+
+import java.time.Duration;
 
 
 public class CustomWebElement implements Element {
@@ -17,8 +23,9 @@ public class CustomWebElement implements Element {
     @Deprecated     // to discourage the basic click method
     public void click(){
         try{
+            waitUntilClickable(customElement);
             String eleName = elementName();
-            ReportTrail.info("Clicking on " + eleName);
+            ReportTrail.info("Clicking on element " + eleName);
             customElement.click();
 //            ReportTrail.info("Clicked on " + eleName);
         }catch (NoSuchElementException ne){
@@ -33,6 +40,7 @@ public class CustomWebElement implements Element {
     public void doubleClick(WebDriver driver){
         try{
             String eleName = elementName();
+            waitUntilClickable(customElement);
             ReportTrail.info("Double clicking on the element " + eleName);
             Actions act = new Actions(driver);
             act.doubleClick(customElement);
@@ -48,6 +56,7 @@ public class CustomWebElement implements Element {
 
     private void click(String elementType){
         try{
+            waitUntilClickable(customElement);
             String eleName = elementName();
             ReportTrail.info("Clicking on " + elementType + " " + eleName);
             customElement.click();
@@ -64,6 +73,10 @@ public class CustomWebElement implements Element {
         }
     }
 
+    public void clickTextField(){
+        click("text field");
+    }
+
     public void clickRadio(){
         click("radio button");
     }
@@ -78,6 +91,7 @@ public class CustomWebElement implements Element {
 
     public void jsClick(WebDriver driver){
         try{
+            waitUntilClickable(customElement);
             String eleName = elementName();
             ReportTrail.info("Clicking on " + eleName + " using JsExecutor");
             ((JavascriptExecutor)driver).executeScript("arguments[0].click();", customElement);
@@ -94,6 +108,7 @@ public class CustomWebElement implements Element {
     public boolean isDisplayed(){
         boolean check = false;
         try{
+            waitUntilClickable(customElement);
             String eleName = elementName();
             ReportTrail.info("Checking if the element " + eleName + " is displayed");
             check = customElement.isDisplayed();
@@ -118,6 +133,7 @@ public class CustomWebElement implements Element {
     public boolean isEnabled(){
         boolean check = false;
         try{
+            waitUntilClickable(customElement);
             String eleName = elementName();
             ReportTrail.info("Checking if the element " + eleName + " is enabled");
             check = customElement.isEnabled();
@@ -139,10 +155,10 @@ public class CustomWebElement implements Element {
         return check;
     }
 
-
     public boolean isChecked(){
         boolean check = false;
         try{
+            waitUntilClickable(customElement);
             String eleName = elementName();
             ReportTrail.info("Verifying if the element " + eleName + " is checked");
             String value =  customElement.getAttribute("class");
@@ -167,6 +183,7 @@ public class CustomWebElement implements Element {
 
     public void selectByIndex(int index){
         try{
+            waitUntilClickable(customElement);
             String eleName = elementNameDropdown();
             ReportTrail.info("Selecting item with index as " + index + " from " + eleName + " dropdown");
             Select selector = new Select(customElement);
@@ -185,6 +202,7 @@ public class CustomWebElement implements Element {
 
     public void selectByVisibleText(String itemName){
         try{
+            waitUntilClickable(customElement);
             String eleName = elementNameDropdown();
             ReportTrail.info("Selecting " + itemName + " from " + eleName + " dropdown");
             Select selector = new Select(customElement);
@@ -201,6 +219,7 @@ public class CustomWebElement implements Element {
 
     public void selectByValue(String itemValue){
         try{
+            waitUntilClickable(customElement);
             String eleName = elementNameDropdown();
             ReportTrail.info("Selecting " + itemValue + " from " + eleName + " dropdown");
             Select selector = new Select(customElement);
@@ -218,6 +237,7 @@ public class CustomWebElement implements Element {
     public String getCurrentSelection(){
         String value = null;
         try{
+            waitUntilClickable(customElement);
             String eleName = elementName();
             ReportTrail.info("Getting current selected option from " + eleName);
             Select selector = new Select(customElement);
@@ -236,6 +256,7 @@ public class CustomWebElement implements Element {
     public String getText(){
         String value = null;
         try{
+            waitUntilClickable(customElement);
             ReportTrail.info("Getting text value from " + elementName());
             value =  customElement.getText();
 //            ReportTrail.info("text value from " + elementName() + " is " + value);
@@ -252,6 +273,7 @@ public class CustomWebElement implements Element {
     public String getAttribute(String attribute){
         String value = null;
         try{
+            waitUntilClickable(customElement);
             ReportTrail.info("Getting " + attribute + "  value from " + elementName());
             value =  customElement.getAttribute(attribute);
             ReportTrail.info(attribute + " value from " + elementName() + " is " + value);
@@ -267,6 +289,7 @@ public class CustomWebElement implements Element {
 
     public void type(String textValue){
         try{
+            waitUntilClickable(customElement);
             ReportTrail.info("Entering the value as  " + textValue + " in text field " + elementName());
             customElement.sendKeys(textValue);
 //            ReportTrail.info("Entered the value as  " + textValue + " in text field");
@@ -279,6 +302,7 @@ public class CustomWebElement implements Element {
 
     public void keyPress(CharSequence... keysToSend){
         try{
+            waitUntilClickable(customElement);
             ReportTrail.info("Pressing the key  " + keysToSend );
             customElement.sendKeys(keysToSend);
 //            ReportTrail.info("Pressed the key  " + keysToSend );
@@ -291,6 +315,7 @@ public class CustomWebElement implements Element {
 
     public void typeAndDownEnterToSelect(String textValue){
         try{
+            waitUntilClickable(customElement);
             ReportTrail.info("Entering the value as  " + textValue + " in text field");
             customElement.sendKeys(textValue);
             customElement.sendKeys(Keys.ARROW_DOWN);
@@ -306,6 +331,7 @@ public class CustomWebElement implements Element {
 
     public void typeAndPressEnter(String textValue){
         try{
+            waitUntilClickable(customElement);
             ReportTrail.info("Entering the value as  " + textValue + " in text field");
             customElement.sendKeys(textValue);
             customElement.sendKeys(Keys.ENTER);
@@ -319,6 +345,7 @@ public class CustomWebElement implements Element {
 
     public void typeAndPressEnterToSelect(String textValue){
         try{
+            waitUntilClickable(customElement);
             ReportTrail.info("Entering the value as  " + textValue + " in text field");
             customElement.sendKeys(textValue);
             customElement.sendKeys(Keys.ENTER);
@@ -333,6 +360,7 @@ public class CustomWebElement implements Element {
 
     public void clear(){
         try{
+            waitUntilClickable(customElement);
             ReportTrail.info("Clearing the value in text field ");
             customElement.clear();
 //            ReportTrail.info("Cleared the value in text field ");
@@ -349,20 +377,30 @@ public class CustomWebElement implements Element {
     }
 
     private String elementName(){
-        String name = this.customElement.getText();
-        if(name.equals("") || name.equals(null)){
-            if (name.equals("") || name.equals((Object)null)) {
-                try{
-                    name = this.customElement.getAccessibleName();
-                }catch (UnsupportedCommandException ue){
-                    name = this.customElement.getAttribute("name");
-                    if(name.equals("") || name.equals(null)){
-                        name = "";
+        String name = "";
+        try{
+            name = this.customElement.getText();
+        }catch (Exception e){
+            try{
+                if(name.equals("") || name.equals(null)){
+                    if (name.equals("") || name.equals((Object)null)) {
+                        try{
+                            name = this.customElement.getAccessibleName();
+                        }catch (UnsupportedCommandException ue){
+                            name = this.customElement.getAttribute("name");
+                            if(name.equals("") || name.equals(null)){
+                                name = "";
+                            }
+                        }
                     }
-                }
-            }
 
+                }
+            }catch (Exception ex){
+                //do nothing
+            }
         }
+
+
         return name;
     }
 
@@ -376,6 +414,16 @@ public class CustomWebElement implements Element {
 
     public WebElement getWrappedElement(){
         return customElement;
+    }
+
+    private static void waitUntilClickable(WebElement el) {
+        WebDriver driver = OmniDriver.getDriver();
+        int timeoutInSeconds = WaitForElement.shortTime;
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds)).until(driver1 -> ExpectedConditions.elementToBeClickable(el).apply(driver));
+        } catch (Exception e) {
+            ReportTrail.error("Encountered error while waiting for element to be clickable whose locator is " + el);
+        }
     }
 
 
