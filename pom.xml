@@ -6,7 +6,21 @@
 
     <groupId>com.tmavens</groupId>
     <artifactId>UiFramework</artifactId>
-    <version>0.0.13</version>
+<!--    <version>1.6-release</version>-->
+    <version>0.1-SNAPSHOT</version>
+
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>mylocalnexus</id>
+            <url>http://localhost:8081/repository/nexus-snapshot-repo/</url>
+        </snapshotRepository>
+        <repository>
+            <id>mylocalnexus</id>
+            <url>http://localhost:8081/repository/nexus-release-repo/</url>
+        </repository>
+
+    </distributionManagement>
 
     <build>
         <plugins>
@@ -151,8 +165,35 @@
             <version>8.0.28</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.thedeanda</groupId>
+            <artifactId>lorem</artifactId>
+            <version>2.1</version>
+        </dependency>
 
+
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>agent-java-testng</artifactId>
+            <version>5.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-log4j</artifactId>
+            <version>5.1.4</version>
+        </dependency>
 
     </dependencies>
+
+    <repositories>
+    <repository>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <id>bintray-epam-reportportal</id>
+        <name>bintray</name>
+        <url>http://dl.bintray.com/epam/reportportal</url>
+    </repository>
+    </repositories>
 
 </project>
