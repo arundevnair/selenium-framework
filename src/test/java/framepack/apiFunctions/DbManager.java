@@ -1,5 +1,6 @@
 package framepack.apiFunctions;
 
+import framepack.utils.Utility;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import reports.ReportTrail;
@@ -86,7 +87,7 @@ public class DbManager {
             while (rs.next()) {
                 Map<String, Object> row = new HashMap<String, Object>();
                 for (int i = 1; i <= columns; i++) {
-                    row.put(rsmd.getColumnLabel(i).toUpperCase(), rs.getObject(i));
+                    row.put(rsmd.getColumnLabel(i), rs.getObject(i));
                 }
                 results.add(row);
             }
@@ -95,6 +96,35 @@ public class DbManager {
             throwables.printStackTrace();
         }
         return results;
+    }
+
+
+    public static HashMap<String, String> resultSetSingleRandomRowToHashMap(ResultSet rs) {
+        ReportTrail.info("Converting the ResultSet into a ListOfMap");
+        ResultSetMetaData rsmd;
+        HashMap<String, String> resultRow = new HashMap<>();
+        List<HashMap<String, String>> results = new ArrayList<>();
+        try {
+            rsmd = rs.getMetaData();
+            int columns = rsmd.getColumnCount();
+            while (rs.next()) {
+                HashMap<String, String> row = new HashMap<>();
+                for (int i = 1; i <= columns; i++) {
+
+                    row.put(rsmd.getColumnLabel(i), rs.getObject(i) == null? null : rs.getObject(i).toString());
+                }
+                results.add(row);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        //Getting a random row of results and returning
+        int size = results.size();
+        int index = Utility.getRandomInt(0,size-1);
+        resultRow = results.get(index);
+        return resultRow;
     }
 
     public static HashMap<String, String> resultSetSingleRowToHashMap(ResultSet rs) {
@@ -106,7 +136,7 @@ public class DbManager {
             int columns = rsmd.getColumnCount();
             rs.next();
             for (int i = 1; i <= columns; i++) {
-                results.put(rsmd.getColumnLabel(i), rs.getObject(i).toString());
+                results.put(rsmd.getColumnLabel(i), rs.getObject(i) == null? null : rs.getObject(i).toString());
             }
 
         } catch (SQLException throwables) {

@@ -6,20 +6,34 @@
 
     <groupId>com.tmavens</groupId>
     <artifactId>UiFramework</artifactId>
-<!--    <version>1.6-release</version>-->
-    <version>0.1-SNAPSHOT</version>
+    <!--    <version>1.6-release</version>-->
+<!--    <version>0.4-SNAPSHOT</version>-->
+    <version>0.0.1</version>
 
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>mylocalnexus</id>
-            <url>http://localhost:8081/repository/nexus-snapshot-repo/</url>
-        </snapshotRepository>
+    <repositories>
         <repository>
-            <id>mylocalnexus</id>
-            <url>http://localhost:8081/repository/nexus-release-repo/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-epam-reportportal</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/epam/reportportal</url>
         </repository>
-
+        <repository>
+            <id>gitlab-maven</id>
+            <url>https://gitlab.com/api/v4/projects/33358954/packages/maven</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>gitlab-maven</id>
+            <url>https://gitlab.com/api/v4/projects/33358954/packages/maven</url>
+        </repository>
+        <snapshotRepository>
+            <id>gitlab-maven</id>
+            <url>https://gitlab.com/api/v4/projects/33358954/packages/maven</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <build>
@@ -128,12 +142,12 @@
             <version>5.0.9</version>
         </dependency>
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.poi/poi &ndash;&gt;
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>5.1.0</version>
-        </dependency>-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.poi/poi &ndash;&gt;
+                <dependency>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi</artifactId>
+                    <version>5.1.0</version>
+                </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
         <dependency>
@@ -185,15 +199,5 @@
 
     </dependencies>
 
-    <repositories>
-    <repository>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <id>bintray-epam-reportportal</id>
-        <name>bintray</name>
-        <url>http://dl.bintray.com/epam/reportportal</url>
-    </repository>
-    </repositories>
 
 </project>
