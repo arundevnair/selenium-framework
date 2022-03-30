@@ -8,7 +8,7 @@
     <artifactId>UiFramework</artifactId>
     <!--    <version>1.6-release</version>-->
 <!--    <version>0.4-SNAPSHOT</version>-->
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 
 
     <repositories>
@@ -201,3 +201,4 @@
 
 
 </project>
+

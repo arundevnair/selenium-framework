@@ -86,6 +86,21 @@ public class RestFunctions {
         return response;
     }
 
+    public static Response post(String url, Headers headers) {
+        ReportTrail.info("Post Request without any payload on url" + url);
+        Response response = given()
+                .relaxedHTTPSValidation()
+                .contentType(ContentType.JSON)
+                .headers(headers)
+                .and()
+                .when()
+                .post(url)
+                .then()
+                .extract().response();
+        ReportTrail.info("Response: ==>> \n" + response.asString());
+        return response;
+    }
+
     public static Response post(String url, String requestBody, Headers headers) {
         ReportTrail.info("Post Request on url" + url);
         ReportTrail.info(".. with the body as request body: \n" + requestBody);
