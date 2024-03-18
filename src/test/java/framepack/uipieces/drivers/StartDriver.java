@@ -124,9 +124,6 @@ public class StartDriver {
 //                opt.addArguments("--start-maximized");
                 opt.addArguments("--kiosk");
 
-//                caps = new DesiredCapabilities();
-//                caps.setCapability(ChromeOptions.CAPABILITY,chromeOptions);
-
                 chromedriver().setup();
                 driver = new ChromeDriver(opt);
                 driver.get(envUrl);
