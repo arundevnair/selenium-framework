@@ -18,20 +18,16 @@
         </repository>
     </distributionManagement>
 
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>bintray-epam-reportportal</id>
-            <name>bintray</name>
-            <url>http://dl.bintray.com/epam/reportportal</url>
-        </repository>
-        <repository>
-            <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/projects/33358954/packages/maven</url>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <snapshots>-->
+<!--                <enabled>false</enabled>-->
+<!--            </snapshots>-->
+<!--            <id>bintray-epam-reportportal</id>-->
+<!--            <name>bintray</name>-->
+<!--            <url>http://dl.bintray.com/epam/reportportal</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
 
     <build>
@@ -75,29 +71,26 @@
 
     <dependencies>
 
-
-        <!--        https://github.com/bonigarcia/webdrivermanager-->
+        <!-- https://github.com/bonigarcia/webdrivermanager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.0.3</version>
+            <version>5.1.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.1.1</version>
+            <version>4.2.2</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.5</version>
+            <version>7.5.1</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.json</groupId>
@@ -108,9 +101,8 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>4.4.0</version>
+            <version>4.5.0</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
@@ -140,26 +132,18 @@
             <version>5.0.9</version>
         </dependency>
 
-        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.poi/poi &ndash;&gt;
-                <dependency>
-                    <groupId>org.apache.poi</groupId>
-                    <artifactId>poi</artifactId>
-                    <version>5.1.0</version>
-                </dependency>-->
-
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>5.2.0</version>
+            <version>5.2.4</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>5.2.0</version>
+            <version>5.2.4</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
@@ -168,7 +152,6 @@
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
@@ -182,7 +165,6 @@
             <artifactId>lorem</artifactId>
             <version>2.1</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.epam.reportportal</groupId>
