@@ -6,10 +6,17 @@
 
     <groupId>com.tmavens</groupId>
     <artifactId>UiFramework</artifactId>
-    <!--    <version>1.6-release</version>-->
 <!--    <version>0.4-SNAPSHOT</version>-->
-    <version>0.0.2</version>
+    <version>0.0.1</version>
 
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>arundevtm</name>
+            <url>https://maven.pkg.github.com/OWNER/REPOSITORY</url>
+        </repository>
+    </distributionManagement>
 
     <repositories>
         <repository>
@@ -25,16 +32,7 @@
             <url>https://gitlab.com/api/v4/projects/33358954/packages/maven</url>
         </repository>
     </repositories>
-    <distributionManagement>
-        <repository>
-            <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/projects/33358954/packages/maven</url>
-        </repository>
-        <snapshotRepository>
-            <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/projects/33358954/packages/maven</url>
-        </snapshotRepository>
-    </distributionManagement>
+
 
     <build>
         <plugins>
