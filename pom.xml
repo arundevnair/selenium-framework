@@ -13,8 +13,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>arundevtm</name>
-            <url>https://maven.pkg.github.com/arundevtm/selenium-java-framework</url>
+            <name>Githun Tm UI Framework</name>
+            <url>https://maven.pkg.github.com/testingmavens/selenium-java-framework</url>
         </repository>
     </distributionManagement>
 
