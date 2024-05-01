@@ -24,6 +24,6 @@ jobs:
         # settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Deploy
-      run: mvn -B -Pgithub deploy
+      run: mvn -B -P github deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
